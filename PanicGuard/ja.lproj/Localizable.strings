@@ -1,0 +1,57 @@
+/* Tabs */
+"tab_panic" = "緊急";
+"tab_fakecall" = "偽着信";
+"tab_settings" = "設定";
+
+/* Modes */
+"mode_siren" = "サイレン";
+"mode_flash" = "フラッシュ";
+"mode_both" = "両方";
+"mode_silent" = "サイレント";
+
+/* Status */
+"status_active" = "警報発動中";
+"status_ready" = "護身モード待機中";
+"status_instruction" = "ボタンをタップするか、スマホを振って緊急アラートを発動";
+
+/* Buttons */
+"btn_panic" = "発動";
+"btn_stop" = "停止";
+"btn_sos" = "SOS送信";
+"btn_record" = "録音";
+"btn_stop_rec" = "録音停止";
+
+/* Fake Call */
+"fakecall_title" = "偽着信";
+"fakecall_desc" = "偽の着信を予約して、危険な状況から自然に離れる口実を作れます。";
+"fakecall_name" = "発信者名";
+"fakecall_name_placeholder" = "お母さん";
+"fakecall_delay" = "着信までの時間";
+"fakecall_scheduled" = "偽着信を予約中...";
+"fakecall_cancel" = "キャンセル";
+"fakecall_start" = "着信を予約";
+"fakecall_test" = "偽着信画面をテスト";
+"fakecall_incoming" = "着信中...";
+"fakecall_decline" = "拒否";
+"fakecall_answer" = "応答";
+
+/* Settings */
+"settings_title" = "設定";
+"settings_contacts" = "緊急連絡先";
+"settings_name" = "名前";
+"settings_phone" = "電話番号";
+"settings_shake" = "シェイク発動";
+"settings_shake_toggle" = "振って緊急アラートを発動";
+"settings_shake_desc" = "スマホを強く振ると、パニックアラートが即座に発動します。";
+"settings_tips" = "安全のヒント";
+
+"tip_1" = "明るく人通りの多い場所を選んで行動しましょう。";
+"tip_2" = "信頼できる人にリアルタイムの位置情報を共有しましょう。";
+"tip_3" = "身の危険を感じたら、すぐに110番に通報してください。";
+"tip_4" = "不審な行動は日時・場所・内容を記録しておきましょう。";
+"tip_5" = "直感を信じてください。違和感があれば助けを求めましょう。";
+
+"disclaimer" = "このアプリは個人の安全ツールです。緊急時は必ず110番に通報してください。専門的な警備サービスの代替にはなりません。";
+
+/* App Store */
+"app_description" = "あなたの安全を守るパーソナルセーフティアプリ。\n\n主な機能：\n- パニックボタン：1タップで大音量サイレン+フラッシュ点滅\n- 偽着信：リアルな偽の着信で自然に離脱\n- 緊急SMS：GPS位置情報付きで緊急連絡先にSOS送信\n- 証拠録音：アラート中に自動で音声録音\n- シェイク発動：スマホを振るだけでハンズフリー発動\n- 4つのモード：サイレン、フラッシュ、両方、サイレント\n\n緊急時は必ず110番に通報してください。";

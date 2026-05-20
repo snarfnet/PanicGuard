@@ -1,0 +1,57 @@
+/* Tabs */
+"tab_panic" = "Panic";
+"tab_fakecall" = "Fake Call";
+"tab_settings" = "Settings";
+
+/* Modes */
+"mode_siren" = "Siren";
+"mode_flash" = "Flash";
+"mode_both" = "Both";
+"mode_silent" = "Silent";
+
+/* Status */
+"status_active" = "ALERT ACTIVE";
+"status_ready" = "Ready to Protect";
+"status_instruction" = "Tap the button or shake your phone to activate emergency alert";
+
+/* Buttons */
+"btn_panic" = "PANIC";
+"btn_stop" = "STOP";
+"btn_sos" = "SOS SMS";
+"btn_record" = "Record";
+"btn_stop_rec" = "Stop Rec";
+
+/* Fake Call */
+"fakecall_title" = "Fake Call";
+"fakecall_desc" = "Schedule a fake incoming call to create a natural excuse to leave a dangerous situation.";
+"fakecall_name" = "Caller Name";
+"fakecall_name_placeholder" = "Mom";
+"fakecall_delay" = "Call After";
+"fakecall_scheduled" = "Fake call scheduled...";
+"fakecall_cancel" = "Cancel";
+"fakecall_start" = "Schedule Call";
+"fakecall_test" = "Test fake call screen";
+"fakecall_incoming" = "Incoming Call...";
+"fakecall_decline" = "Decline";
+"fakecall_answer" = "Answer";
+
+/* Settings */
+"settings_title" = "Settings";
+"settings_contacts" = "Emergency Contacts";
+"settings_name" = "Name";
+"settings_phone" = "Phone";
+"settings_shake" = "Shake Activation";
+"settings_shake_toggle" = "Shake to activate alert";
+"settings_shake_desc" = "Shake your phone hard to instantly trigger the panic alert.";
+"settings_tips" = "Safety Tips";
+
+"tip_1" = "Stay in well-lit, populated areas whenever possible.";
+"tip_2" = "Share your real-time location with a trusted friend or family member.";
+"tip_3" = "If you feel threatened, call emergency services immediately.";
+"tip_4" = "Document any suspicious behavior with dates, times, and descriptions.";
+"tip_5" = "Trust your instincts. If something feels wrong, seek help.";
+
+"disclaimer" = "This app is a personal safety tool. In a real emergency, always call local emergency services (110 in Japan, 911 in the US). This app does not replace professional security assistance.";
+
+/* App Store */
+"app_description" = "Your personal safety companion. Stalker Deterrent provides instant emergency alert tools to help you feel safer.\n\nFeatures:\n- Panic Button: one tap triggers loud siren + flash strobe\n- Fake Call: schedule a realistic fake incoming call to escape situations\n- Emergency SMS: send your GPS location to emergency contacts\n- Evidence Recording: record audio automatically during alerts\n- Shake Activation: shake your phone to trigger alert hands-free\n- Multiple modes: Siren, Flash, Both, or Silent\n\nFor personal safety. In an emergency, always call local authorities.";
