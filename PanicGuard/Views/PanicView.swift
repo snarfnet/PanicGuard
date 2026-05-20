@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct PanicView: View {
     @EnvironmentObject var em: EmergencyManager
@@ -205,16 +206,30 @@ struct PanicView: View {
         .padding(.horizontal)
     }
 
+    @State private var showSOSCopied = false
+
     // MARK: - Quick Actions
     private var quickActions: some View {
         HStack(spacing: 12) {
             // Emergency SMS
-            if let url = em.getEmergencySMSURL() {
+            if em.contacts.isEmpty {
+                quickActionButton(icon: "message.fill", label: String(localized: "btn_sos"), color: .gray.opacity(0.3))
+            } else if let url = em.getEmergencySMSURL(), UIApplication.shared.canOpenURL(url) {
                 Link(destination: url) {
                     quickActionButton(icon: "message.fill", label: String(localized: "btn_sos"), color: .orange)
                 }
             } else {
-                quickActionButton(icon: "message.fill", label: String(localized: "btn_sos"), color: .gray.opacity(0.3))
+                Button {
+                    UIPasteboard.general.string = em.getEmergencyMessage()
+                    showSOSCopied = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSOSCopied = false }
+                } label: {
+                    quickActionButton(
+                        icon: showSOSCopied ? "checkmark" : "doc.on.doc.fill",
+                        label: showSOSCopied ? String(localized: "btn_sos_copied") : String(localized: "btn_sos_copy"),
+                        color: .orange
+                    )
+                }
             }
 
             // Record

@@ -18,6 +18,8 @@
 "btn_panic" = "発動";
 "btn_stop" = "停止";
 "btn_sos" = "SOS送信";
+"btn_sos_copy" = "SOSコピー";
+"btn_sos_copied" = "コピー済み";
 "btn_record" = "録音";
 "btn_stop_rec" = "録音停止";
 

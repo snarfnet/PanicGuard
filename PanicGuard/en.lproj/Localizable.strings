@@ -18,6 +18,8 @@
 "btn_panic" = "PANIC";
 "btn_stop" = "STOP";
 "btn_sos" = "SOS SMS";
+"btn_sos_copy" = "Copy SOS";
+"btn_sos_copied" = "Copied!";
 "btn_record" = "Record";
 "btn_stop_rec" = "Stop Rec";
 
