@@ -1,0 +1,133 @@
+name: Take Screenshots and Upload to ASC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  screenshots:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Select Xcode
+      run: |
+        XCODE_APP=$(ls /Applications/ | grep -E "^Xcode_2[6-9]|^Xcode_[3-9][0-9]" | sort -V | tail -1)
+        if [ -n "$XCODE_APP" ]; then
+          sudo xcode-select -s "/Applications/$XCODE_APP"
+        else
+          XCODE_APP=$(ls /Applications/ | grep "^Xcode_" | sort -V | tail -1)
+          sudo xcode-select -s "/Applications/$XCODE_APP"
+        fi
+        xcodebuild -version
+
+    - name: Resolve packages
+      run: xcodebuild -resolvePackageDependencies -project PanicGuard.xcodeproj -scheme PanicGuard
+
+    - name: Build for Simulator (iPhone)
+      run: |
+        xcodebuild build \
+          -project PanicGuard.xcodeproj \
+          -scheme PanicGuard \
+          -configuration Release \
+          -destination "platform=iOS Simulator,name=iPhone 16 Pro Max" \
+          -derivedDataPath build/derived \
+          CODE_SIGN_IDENTITY="-" \
+          CODE_SIGNING_ALLOWED=NO
+
+    - name: Take iPhone Screenshots
+      run: |
+        DEVICE_ID=$(xcrun simctl list devices available | grep "iPhone 16 Pro Max" | head -1 | grep -oE '[0-9A-F-]{36}')
+        xcrun simctl boot "$DEVICE_ID" || true
+        sleep 5
+
+        APP_PATH=$(find build/derived -name "PanicGuard.app" -path "*/Release-iphonesimulator/*" | head -1)
+        xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+
+        mkdir -p screenshots/iphone
+
+        # Tab 0: Panic (main)
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=0
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/iphone/01_panic.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        # Tab 1: Fake Call
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=1
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/iphone/02_fakecall.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        # Tab 2: Settings
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=2
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/iphone/03_settings.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        xcrun simctl shutdown "$DEVICE_ID"
+
+    - name: Build for Simulator (iPad)
+      run: |
+        xcodebuild build \
+          -project PanicGuard.xcodeproj \
+          -scheme PanicGuard \
+          -configuration Release \
+          -destination "platform=iOS Simulator,name=iPad Air 13-inch (M3)" \
+          -derivedDataPath build/derived-ipad \
+          CODE_SIGN_IDENTITY="-" \
+          CODE_SIGNING_ALLOWED=NO
+
+    - name: Take iPad Screenshots
+      run: |
+        DEVICE_ID=$(xcrun simctl list devices available | grep "iPad Air 13-inch (M3)" | head -1 | grep -oE '[0-9A-F-]{36}')
+        if [ -z "$DEVICE_ID" ]; then
+          DEVICE_ID=$(xcrun simctl list devices available | grep "iPad Air" | head -1 | grep -oE '[0-9A-F-]{36}')
+        fi
+        xcrun simctl boot "$DEVICE_ID" || true
+        sleep 5
+
+        APP_PATH=$(find build/derived-ipad -name "PanicGuard.app" -path "*/Release-iphonesimulator/*" | head -1)
+        xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+
+        mkdir -p screenshots/ipad
+
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=0
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/ipad/01_panic.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=1
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/ipad/02_fakecall.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        xcrun simctl launch "$DEVICE_ID" com.snarfnet.panicguard -- --tab=2
+        sleep 4
+        xcrun simctl io "$DEVICE_ID" screenshot screenshots/ipad/03_settings.png
+        xcrun simctl terminate "$DEVICE_ID" com.snarfnet.panicguard
+
+        xcrun simctl shutdown "$DEVICE_ID"
+
+    - name: Set up ASC API Key
+      env:
+        ASC_API_KEY_CONTENT: ${{ secrets.ASC_API_KEY_CONTENT }}
+      run: |
+        mkdir -p ~/.appstoreconnect/private_keys
+        echo "$ASC_API_KEY_CONTENT" | base64 -D > /tmp/asc_key.p8
+
+    - name: Install dependencies
+      run: pip3 install --break-system-packages PyJWT requests
+
+    - name: Upload Screenshots to ASC
+      run: python3 scripts/upload_screenshots.py
+      env:
+        ASC_KEY_ID: WDXGY9WX55
+        ASC_ISSUER_ID: 2be0734f-943a-4d61-9dc9-5d9045c46fec
+        ASC_KEY_PATH: /tmp/asc_key.p8
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots
+        path: screenshots/

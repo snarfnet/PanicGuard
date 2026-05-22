@@ -2,7 +2,16 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var em: EmergencyManager
-    @State private var selectedTab = 0
+    @State private var selectedTab: Int
+
+    init() {
+        if let tabArg = ProcessInfo.processInfo.arguments.first(where: { $0.hasPrefix("--tab=") }),
+           let num = Int(tabArg.replacingOccurrences(of: "--tab=", with: "")) {
+            _selectedTab = State(initialValue: num)
+        } else {
+            _selectedTab = State(initialValue: 0)
+        }
+    }
 
     var body: some View {
         ZStack {
