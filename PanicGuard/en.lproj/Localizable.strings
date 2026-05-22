@@ -55,5 +55,10 @@
 
 "disclaimer" = "This app is a personal safety tool. In a real emergency, always call local emergency services (110 in Japan, 911 in the US). This app does not replace professional security assistance.";
 
+/* SOS Message */
+"sos_message_header" = "EMERGENCY! I need help!";
+"sos_message_location" = "My location:";
+"sos_message_footer" = "Sent via PanicGuard";
+
 /* App Store */
 "app_description" = "Your personal safety companion. Stalker Deterrent provides instant emergency alert tools to help you feel safer.\n\nFeatures:\n- Panic Button: one tap triggers loud siren + flash strobe\n- Fake Call: schedule a realistic fake incoming call to escape situations\n- Emergency SMS: send your GPS location to emergency contacts\n- Evidence Recording: record audio automatically during alerts\n- Shake Activation: shake your phone to trigger alert hands-free\n- Multiple modes: Siren, Flash, Both, or Silent\n\nFor personal safety. In an emergency, always call local authorities.";

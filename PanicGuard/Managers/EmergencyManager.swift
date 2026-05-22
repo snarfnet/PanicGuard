@@ -202,11 +202,11 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     // MARK: - Emergency SMS
     func getEmergencyMessage() -> String {
-        var msg = "EMERGENCY! I need help!\n"
+        var msg = String(localized: "sos_message_header") + "\n"
         if let loc = currentLocation {
-            msg += "My location: https://maps.apple.com/?ll=\(loc.coordinate.latitude),\(loc.coordinate.longitude)\n"
+            msg += String(localized: "sos_message_location") + " https://maps.apple.com/?ll=\(loc.coordinate.latitude),\(loc.coordinate.longitude)\n"
         }
-        msg += "Sent via PanicGuard"
+        msg += String(localized: "sos_message_footer")
         return msg
     }
 

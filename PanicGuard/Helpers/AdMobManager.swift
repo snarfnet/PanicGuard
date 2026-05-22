@@ -18,7 +18,7 @@ struct BannerAdView: UIViewRepresentable {
         let banner = GADBannerView(adSize: GADAdSizeBanner)
         banner.adUnitID = adUnitID
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootVC = windowScene.windows.first?.rootViewController {
+           let rootVC = windowScene.keyWindow?.rootViewController {
             banner.rootViewController = rootVC
         }
         banner.load(GADRequest())

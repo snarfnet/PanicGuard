@@ -42,7 +42,7 @@ struct FakeCallProfile: Identifiable, Codable {
     var callerName: String
     var delaySeconds: Int
 
-    init(id: UUID = UUID(), callerName: String = "Mom", delaySeconds: Int = 30) {
+    init(id: UUID = UUID(), callerName: String = String(localized: "fakecall_name_placeholder"), delaySeconds: Int = 30) {
         self.id = id
         self.callerName = callerName
         self.delaySeconds = delaySeconds

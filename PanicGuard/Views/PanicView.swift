@@ -214,22 +214,23 @@ struct PanicView: View {
             // Emergency SMS
             if em.contacts.isEmpty {
                 quickActionButton(icon: "message.fill", label: String(localized: "btn_sos"), color: .gray.opacity(0.3))
-            } else if let url = em.getEmergencySMSURL(), UIApplication.shared.canOpenURL(url) {
-                Link(destination: url) {
-                    quickActionButton(icon: "message.fill", label: String(localized: "btn_sos"), color: .orange)
-                }
             } else {
                 Button {
-                    UIPasteboard.general.string = em.getEmergencyMessage()
-                    showSOSCopied = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSOSCopied = false }
+                    if let url = em.getEmergencySMSURL() {
+                        UIApplication.shared.open(url)
+                    } else {
+                        UIPasteboard.general.string = em.getEmergencyMessage()
+                        showSOSCopied = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSOSCopied = false }
+                    }
                 } label: {
                     quickActionButton(
-                        icon: showSOSCopied ? "checkmark" : "doc.on.doc.fill",
-                        label: showSOSCopied ? String(localized: "btn_sos_copied") : String(localized: "btn_sos_copy"),
+                        icon: showSOSCopied ? "checkmark" : "message.fill",
+                        label: showSOSCopied ? String(localized: "btn_sos_copied") : String(localized: "btn_sos"),
                         color: .orange
                     )
                 }
+                .buttonStyle(.plain)
             }
 
             // Record
@@ -246,6 +247,7 @@ struct PanicView: View {
                     color: em.isRecording ? .red : .blue
                 )
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal)
     }
@@ -263,6 +265,7 @@ struct PanicView: View {
         .background(color.opacity(0.1))
         .cornerRadius(10)
         .overlay(RoundedRectangle(cornerRadius: 10).stroke(color.opacity(0.3), lineWidth: 1))
+        .contentShape(Rectangle())
     }
 
     private func formatDuration(_ seconds: TimeInterval) -> String {
