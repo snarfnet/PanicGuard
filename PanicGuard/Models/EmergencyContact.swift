@@ -20,10 +20,10 @@ enum AlertMode: String, CaseIterable {
 
     var label: String {
         switch self {
-        case .siren: return String(localized: "mode_siren")
-        case .flash: return String(localized: "mode_flash")
-        case .both: return String(localized: "mode_both")
-        case .silent: return String(localized: "mode_silent")
+        case .siren: return L.mode_siren
+        case .flash: return L.mode_flash
+        case .both: return L.mode_both
+        case .silent: return L.mode_silent
         }
     }
 
@@ -42,7 +42,7 @@ struct FakeCallProfile: Identifiable, Codable {
     var callerName: String
     var delaySeconds: Int
 
-    init(id: UUID = UUID(), callerName: String = String(localized: "fakecall_name_placeholder"), delaySeconds: Int = 30) {
+    init(id: UUID = UUID(), callerName: String = L.fakecall_name_placeholder, delaySeconds: Int = 30) {
         self.id = id
         self.callerName = callerName
         self.delaySeconds = delaySeconds

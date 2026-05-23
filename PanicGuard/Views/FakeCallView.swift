@@ -7,34 +7,34 @@ struct FakeCallView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.05, green: 0.05, blue: 0.08).ignoresSafeArea()
+            PGTheme.background.ignoresSafeArea()
 
             VStack(spacing: 20) {
                 // Header
                 HStack {
                     Image(systemName: "phone.arrow.down.left.fill")
                         .font(.title2)
-                        .foregroundColor(.green)
-                    Text(String(localized: "fakecall_title"))
+                        .foregroundColor(PGTheme.pink)
+                    Text(L.fakecall_title)
                         .font(.system(size: 18, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(PGTheme.ink)
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.top, 16)
 
-                Text(String(localized: "fakecall_desc"))
+                Text(L.fakecall_desc)
                     .font(.system(size: 13))
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(PGTheme.steel)
                     .padding(.horizontal)
 
                 // Caller name
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(String(localized: "fakecall_name"))
+                    Text(L.fakecall_name)
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(PGTheme.ink.opacity(0.72))
 
-                    TextField(String(localized: "fakecall_name_placeholder"), text: $callerName)
+                    TextField(L.fakecall_name_placeholder, text: $callerName)
                         .textFieldStyle(.roundedBorder)
                         .onChange(of: callerName) { _, val in
                             em.fakeCallProfile.callerName = val
@@ -45,9 +45,9 @@ struct FakeCallView: View {
 
                 // Delay
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(String(localized: "fakecall_delay"))
+                    Text(L.fakecall_delay)
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(PGTheme.ink.opacity(0.72))
 
                     HStack(spacing: 12) {
                         ForEach([10, 30, 60, 120], id: \.self) { seconds in
@@ -58,16 +58,16 @@ struct FakeCallView: View {
                             } label: {
                                 Text(seconds < 60 ? "\(seconds)s" : "\(seconds/60)m")
                                     .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(delaySeconds == seconds ? .white : .white.opacity(0.4))
+                                    .foregroundColor(delaySeconds == seconds ? .white : PGTheme.pink)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 10)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(delaySeconds == seconds ? Color.green.opacity(0.3) : Color.white.opacity(0.05))
+                                            .fill(delaySeconds == seconds ? PGTheme.pink : Color.white)
                                     )
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(delaySeconds == seconds ? Color.green.opacity(0.5) : Color.clear, lineWidth: 1)
+                                            .stroke(delaySeconds == seconds ? PGTheme.pink : PGTheme.pink.opacity(0.18), lineWidth: 1)
                                     )
                             }
                         }
@@ -81,21 +81,21 @@ struct FakeCallView: View {
                 if em.isFakeCallScheduled {
                     VStack(spacing: 12) {
                         ProgressView()
-                            .tint(.green)
-                        Text(String(localized: "fakecall_scheduled"))
+                            .tint(PGTheme.pink)
+                        Text(L.fakecall_scheduled)
                             .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.green)
+                            .foregroundColor(PGTheme.pink)
 
                         Button {
                             em.cancelFakeCall()
                         } label: {
-                            Text(String(localized: "fakecall_cancel"))
+                            Text(L.fakecall_cancel)
                                 .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.red)
+                                .foregroundColor(PGTheme.danger)
                                 .padding(.horizontal, 30)
                                 .padding(.vertical, 12)
-                                .background(Color.red.opacity(0.1))
-                                .cornerRadius(10)
+                                .background(PGTheme.panelHot)
+                                .cornerRadius(8)
                         }
                     }
                 } else {
@@ -105,7 +105,7 @@ struct FakeCallView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "phone.fill")
                                 .font(.system(size: 20))
-                            Text(String(localized: "fakecall_start"))
+                            Text(L.fakecall_start)
                                 .font(.system(size: 18, weight: .black, design: .rounded))
                         }
                         .foregroundColor(.white)
@@ -113,9 +113,9 @@ struct FakeCallView: View {
                         .padding(.vertical, 18)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(LinearGradient(colors: [.green, .green.opacity(0.7)], startPoint: .top, endPoint: .bottom))
+                                .fill(LinearGradient(colors: [PGTheme.pink, PGTheme.danger], startPoint: .topLeading, endPoint: .bottomTrailing))
                         )
-                        .shadow(color: .green.opacity(0.3), radius: 10)
+                        .shadow(color: PGTheme.pink.opacity(0.28), radius: 10)
                     }
                     .padding(.horizontal)
                 }
@@ -126,9 +126,9 @@ struct FakeCallView: View {
                 Button {
                     em.fakeCallActive = true
                 } label: {
-                    Text(String(localized: "fakecall_test"))
+                    Text(L.fakecall_test)
                         .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.3))
+                        .foregroundColor(PGTheme.steel)
                 }
                 .padding(.bottom, 8)
 
@@ -178,7 +178,7 @@ struct FakeCallScreenView: View {
                     .font(.system(size: 32, weight: .light))
                     .foregroundColor(.white)
 
-                Text(String(localized: "fakecall_incoming"))
+                Text(L.fakecall_incoming)
                     .font(.system(size: 16))
                     .foregroundColor(.white.opacity(0.5))
 
@@ -200,7 +200,7 @@ struct FakeCallScreenView: View {
                                     .foregroundColor(.white)
                                     .rotationEffect(.degrees(135))
                             }
-                            Text(String(localized: "fakecall_decline"))
+                            Text(L.fakecall_decline)
                                 .font(.system(size: 12))
                                 .foregroundColor(.white.opacity(0.6))
                         }
@@ -219,7 +219,7 @@ struct FakeCallScreenView: View {
                                     .font(.system(size: 28))
                                     .foregroundColor(.white)
                             }
-                            Text(String(localized: "fakecall_answer"))
+                            Text(L.fakecall_answer)
                                 .font(.system(size: 12))
                                 .foregroundColor(.white.opacity(0.6))
                         }

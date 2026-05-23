@@ -14,6 +14,21 @@ DISPLAY_TYPES = {
     "ipad": "APP_IPAD_PRO_13_M4",
 }
 
+SCREENSHOT_FILES = {
+    "iphone": [
+        "screenshots/iphone/screenshot_01_ready.png",
+        "screenshots/iphone/screenshot_02_active.png",
+        "screenshots/iphone/screenshot_03_record.png",
+        "screenshots/iphone/screenshot_04_location.png",
+    ],
+    "ipad": [
+        "screenshots/ipad/ipad_screenshot_01_ready.png",
+        "screenshots/ipad/ipad_screenshot_02_active.png",
+        "screenshots/ipad/ipad_screenshot_03_record.png",
+        "screenshots/ipad/ipad_screenshot_04_location.png",
+    ],
+}
+
 def get_token():
     with open(KEY_PATH, "r") as f:
         key = f.read()
@@ -133,7 +148,7 @@ def main():
         print(f"\nLocale: {locale} (ID: {loc_id})")
 
         for device_type, display_type in DISPLAY_TYPES.items():
-            screenshots = sorted(glob.glob(f"screenshots/{device_type}/*.png"))
+            screenshots = [path for path in SCREENSHOT_FILES[device_type] if os.path.exists(path)]
             if not screenshots:
                 print(f"  No {device_type} screenshots found")
                 continue

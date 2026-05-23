@@ -18,26 +18,26 @@ struct ContentView: View {
             TabView(selection: $selectedTab) {
                 PanicView()
                     .tabItem {
-                        Image(systemName: "exclamationmark.shield.fill")
-                        Text(String(localized: "tab_panic"))
+                        Image(systemName: "hand.raised.fill")
+                        Text(L.tab_panic)
                     }
                     .tag(0)
 
                 FakeCallView()
                     .tabItem {
                         Image(systemName: "phone.arrow.down.left.fill")
-                        Text(String(localized: "tab_fakecall"))
+                        Text(L.tab_fakecall)
                     }
                     .tag(1)
 
                 SettingsView()
                     .tabItem {
                         Image(systemName: "gearshape.fill")
-                        Text(String(localized: "tab_settings"))
+                        Text(L.tab_settings)
                     }
                     .tag(2)
             }
-            .tint(.red)
+            .tint(PGTheme.danger)
 
             // Fake call overlay
             if em.fakeCallActive {

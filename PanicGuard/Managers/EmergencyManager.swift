@@ -202,11 +202,11 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     // MARK: - Emergency SMS
     func getEmergencyMessage() -> String {
-        var msg = String(localized: "sos_message_header") + "\n"
+        var msg = L.sos_message_header + "\n"
         if let loc = currentLocation {
-            msg += String(localized: "sos_message_location") + " https://maps.apple.com/?ll=\(loc.coordinate.latitude),\(loc.coordinate.longitude)\n"
+            msg += L.sos_message_location + " https://maps.apple.com/?ll=\(loc.coordinate.latitude),\(loc.coordinate.longitude)\n"
         }
-        msg += String(localized: "sos_message_footer")
+        msg += L.sos_message_footer
         return msg
     }
 

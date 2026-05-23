@@ -17,6 +17,8 @@
 		AA000008 /* AdMobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000008; };
 		AA000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB000009; };
 		AA000010 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD000001; };
+		AA000011 /* L.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000011; };
+		AA000012 /* PGTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000012; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		AB000008 /* AdMobManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobManager.swift; sourceTree = "<group>"; };
 		AB000009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB000010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB000011 /* L.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L.swift; sourceTree = "<group>"; };
+		AB000012 /* PGTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGTheme.swift; sourceTree = "<group>"; };
 		AB000020 /* PanicGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PanicGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -98,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				AB000008 /* AdMobManager.swift */,
+				AB000011 /* L.swift */,
+				AB000012 /* PGTheme.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -181,6 +187,8 @@
 				AA000006,
 				AA000007,
 				AA000008,
+				AA000011,
+				AA000012,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@ struct SettingsView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.05, green: 0.05, blue: 0.08).ignoresSafeArea()
+            PGTheme.background.ignoresSafeArea()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -15,24 +15,24 @@ struct SettingsView: View {
                     HStack {
                         Image(systemName: "gearshape.fill")
                             .font(.title2)
-                            .foregroundColor(.white.opacity(0.6))
-                        Text(String(localized: "settings_title"))
+                            .foregroundColor(PGTheme.pink)
+                        Text(L.settings_title)
                             .font(.system(size: 18, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(PGTheme.ink)
                     }
                     .padding(.top, 16)
 
                     // Emergency Contacts
-                    settingsSection(title: String(localized: "settings_contacts"), icon: "person.2.fill") {
+                    settingsSection(title: L.settings_contacts, icon: "person.2.fill") {
                         ForEach(em.contacts) { contact in
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(contact.name)
                                         .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(PGTheme.ink)
                                     Text(contact.phone)
                                         .font(.system(size: 12))
-                                        .foregroundColor(.white.opacity(0.5))
+                                        .foregroundColor(PGTheme.steel)
                                 }
                                 Spacer()
                                 Button {
@@ -40,7 +40,7 @@ struct SettingsView: View {
                                     em.saveContacts()
                                 } label: {
                                     Image(systemName: "trash")
-                                        .foregroundColor(.red.opacity(0.6))
+                                        .foregroundColor(PGTheme.danger)
                                 }
                             }
                             .padding(.vertical, 4)
@@ -48,11 +48,11 @@ struct SettingsView: View {
 
                         // Add contact
                         HStack(spacing: 8) {
-                            TextField(String(localized: "settings_name"), text: $newContactName)
+                            TextField(L.settings_name, text: $newContactName)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(maxWidth: .infinity)
 
-                            TextField(String(localized: "settings_phone"), text: $newContactPhone)
+                            TextField(L.settings_phone, text: $newContactPhone)
                                 .textFieldStyle(.roundedBorder)
                                 .keyboardType(.phonePad)
                                 .frame(maxWidth: .infinity)
@@ -66,19 +66,19 @@ struct SettingsView: View {
                             } label: {
                                 Image(systemName: "plus.circle.fill")
                                     .font(.title2)
-                                    .foregroundColor(.green)
+                                    .foregroundColor(PGTheme.mint)
                             }
                         }
                     }
 
                     // Shake Detection
-                    settingsSection(title: String(localized: "settings_shake"), icon: "iphone.radiowaves.left.and.right") {
+                    settingsSection(title: L.settings_shake, icon: "iphone.radiowaves.left.and.right") {
                         Toggle(isOn: $em.shakeToActivate) {
-                            Text(String(localized: "settings_shake_toggle"))
+                            Text(L.settings_shake_toggle)
                                 .font(.system(size: 14))
-                                .foregroundColor(.white)
+                                .foregroundColor(PGTheme.ink)
                         }
-                        .tint(.red)
+                        .tint(PGTheme.pink)
                         .onChange(of: em.shakeToActivate) { _, val in
                             em.saveSettings()
                             if val {
@@ -88,26 +88,26 @@ struct SettingsView: View {
                             }
                         }
 
-                        Text(String(localized: "settings_shake_desc"))
+                        Text(L.settings_shake_desc)
                             .font(.system(size: 11))
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(PGTheme.steel)
                     }
 
                     // Safety Tips
-                    settingsSection(title: String(localized: "settings_tips"), icon: "lightbulb.fill") {
+                    settingsSection(title: L.settings_tips, icon: "lightbulb.fill") {
                         VStack(alignment: .leading, spacing: 8) {
-                            tipRow("1", String(localized: "tip_1"))
-                            tipRow("2", String(localized: "tip_2"))
-                            tipRow("3", String(localized: "tip_3"))
-                            tipRow("4", String(localized: "tip_4"))
-                            tipRow("5", String(localized: "tip_5"))
+                            tipRow("1", L.tip_1)
+                            tipRow("2", L.tip_2)
+                            tipRow("3", L.tip_3)
+                            tipRow("4", L.tip_4)
+                            tipRow("5", L.tip_5)
                         }
                     }
 
                     // Disclaimer
-                    Text(String(localized: "disclaimer"))
+                    Text(L.disclaimer)
                         .font(.system(size: 10))
-                        .foregroundColor(.white.opacity(0.25))
+                        .foregroundColor(PGTheme.steel.opacity(0.72))
                         .padding(.top, 8)
 
                     // Ad
@@ -124,18 +124,19 @@ struct SettingsView: View {
             HStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.system(size: 12))
-                    .foregroundColor(.red)
+                    .foregroundColor(PGTheme.pink)
                 Text(title)
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(PGTheme.ink)
             }
 
             VStack(alignment: .leading, spacing: 8) {
                 content()
             }
             .padding(12)
-            .background(Color.white.opacity(0.05))
-            .cornerRadius(12)
+            .background(Color.white)
+            .cornerRadius(8)
+            .shadow(color: Color.black.opacity(0.06), radius: 10, y: 5)
         }
     }
 
@@ -143,11 +144,11 @@ struct SettingsView: View {
         HStack(alignment: .top, spacing: 8) {
             Text(num)
                 .font(.system(size: 11, weight: .bold))
-                .foregroundColor(.red)
+                .foregroundColor(PGTheme.pink)
                 .frame(width: 16)
             Text(text)
                 .font(.system(size: 12))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(PGTheme.ink.opacity(0.72))
         }
     }
 }
