@@ -10,6 +10,7 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var isFakeCallScheduled = false
     @Published var fakeCallActive = false
     @Published var currentLocation: CLLocation?
+    @Published var locationAuthorized = false
     @Published var alertMode: AlertMode = .both
     @Published var shakeToActivate = true
     @Published var contacts: [EmergencyContact] = []
@@ -25,6 +26,7 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var fakeCallTimer: Timer?
     private var recordingTimer: Timer?
     private let motionManager = CMMotionManager()
+    private var pendingLocationRequest = false
 
     override init() {
         super.init()
@@ -36,15 +38,62 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     // MARK: - Location
     func requestLocationPermission() {
-        locationManager.requestWhenInUseAuthorization()
+        let status = locationManager.authorizationStatus
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationAuthorized = true
+            startLocationTracking()
+        default:
+            locationAuthorized = false
+        }
     }
 
     func startLocationTracking() {
+        let status = locationManager.authorizationStatus
+        guard status == .authorizedWhenInUse || status == .authorizedAlways else {
+            pendingLocationRequest = true
+            locationManager.requestWhenInUseAuthorization()
+            return
+        }
         locationManager.startUpdatingLocation()
+    }
+
+    /// Request a one-shot location for SOS message
+    func requestCurrentLocation() {
+        let status = locationManager.authorizationStatus
+        guard status == .authorizedWhenInUse || status == .authorizedAlways else {
+            pendingLocationRequest = true
+            locationManager.requestWhenInUseAuthorization()
+            return
+        }
+        locationManager.requestLocation()
+    }
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        DispatchQueue.main.async {
+            self.locationAuthorized = (status == .authorizedWhenInUse || status == .authorizedAlways)
+        }
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
+            if pendingLocationRequest {
+                pendingLocationRequest = false
+                manager.startUpdatingLocation()
+            }
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.last
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("[PanicGuard] Location error: \(error.localizedDescription)")
+        // If location fails, try requestLocation as fallback
+        if let clError = error as? CLError, clError.code == .denied {
+            DispatchQueue.main.async { self.locationAuthorized = false }
+        }
     }
 
     // MARK: - Panic Alert
