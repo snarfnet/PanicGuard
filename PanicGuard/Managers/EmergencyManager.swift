@@ -27,6 +27,8 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var recordingTimer: Timer?
     private let motionManager = CMMotionManager()
     private var pendingLocationRequest = false
+    private var locationCallback: ((CLLocation?) -> Void)?
+    private var locationTimeoutTimer: Timer?
 
     override init() {
         super.init()
@@ -60,15 +62,35 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
 
-    /// Request a one-shot location for SOS message
-    func requestCurrentLocation() {
+    /// Request a one-shot location for SOS message with callback
+    func requestCurrentLocation(completion: ((CLLocation?) -> Void)? = nil) {
+        // If we already have a recent location (< 30s old), use it immediately
+        if let loc = currentLocation, Date().timeIntervalSince(loc.timestamp) < 30 {
+            completion?(loc)
+            return
+        }
+
         let status = locationManager.authorizationStatus
         guard status == .authorizedWhenInUse || status == .authorizedAlways else {
             pendingLocationRequest = true
             locationManager.requestWhenInUseAuthorization()
+            // Still call completion with nil so the caller can proceed
+            completion?(nil)
             return
         }
-        locationManager.startUpdatingLocation()
+
+        if let completion {
+            locationCallback = completion
+            // Timeout after 5 seconds - send whatever we have
+            locationTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { [weak self] _ in
+                guard let self else { return }
+                let cb = self.locationCallback
+                self.locationCallback = nil
+                cb?(self.currentLocation)
+            }
+        }
+
+        locationManager.requestLocation()
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -84,13 +106,25 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.last
+        if let cb = locationCallback {
+            locationTimeoutTimer?.invalidate()
+            locationTimeoutTimer = nil
+            locationCallback = nil
+            cb(currentLocation)
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("[PanicGuard] Location error: \(error.localizedDescription)")
-        // If location fails, try requestLocation as fallback
         if let clError = error as? CLError, clError.code == .denied {
             DispatchQueue.main.async { self.locationAuthorized = false }
+        }
+        // Fulfill callback with whatever we have (possibly nil)
+        if let cb = locationCallback {
+            locationTimeoutTimer?.invalidate()
+            locationTimeoutTimer = nil
+            locationCallback = nil
+            DispatchQueue.main.async { cb(self.currentLocation) }
         }
     }
 

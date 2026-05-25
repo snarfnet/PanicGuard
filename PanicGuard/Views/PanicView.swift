@@ -355,16 +355,15 @@ struct PanicView: View {
     }
 
     private func sendSOS() {
-        // Ensure we have a fresh location before sending
-        em.requestCurrentLocation()
-        // Small delay to allow location update, then send
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if let url = em.getEmergencySMSURL() {
-                UIApplication.shared.open(url)
-            } else {
-                UIPasteboard.general.string = em.getEmergencyMessage()
-                showSOSCopied = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSOSCopied = false }
+        em.requestCurrentLocation { _ in
+            DispatchQueue.main.async {
+                if let url = em.getEmergencySMSURL() {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIPasteboard.general.string = em.getEmergencyMessage()
+                    showSOSCopied = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { showSOSCopied = false }
+                }
             }
         }
     }
