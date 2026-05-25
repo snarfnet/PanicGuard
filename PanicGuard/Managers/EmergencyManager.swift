@@ -68,7 +68,7 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             locationManager.requestWhenInUseAuthorization()
             return
         }
-        locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -77,10 +77,8 @@ class EmergencyManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.locationAuthorized = (status == .authorizedWhenInUse || status == .authorizedAlways)
         }
         if status == .authorizedWhenInUse || status == .authorizedAlways {
-            if pendingLocationRequest {
-                pendingLocationRequest = false
-                manager.startUpdatingLocation()
-            }
+            manager.startUpdatingLocation()
+            pendingLocationRequest = false
         }
     }
 

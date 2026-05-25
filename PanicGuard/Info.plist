@@ -54,6 +54,8 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>広告の最適化のため、トラッキングの許可をお願いしています。</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9404799280370656~4499621003</string>
 	<key>SKAdNetworkItems</key>
